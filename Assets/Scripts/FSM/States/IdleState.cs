@@ -6,12 +6,12 @@ using UnityEngine.AI;
 public class IdleState : State
 {
     public MoveToState moveToState;
-    public CollectState collectState;
+    public InteractState interactState;
 
     protected override void OnEnable()
     {
         navMeshAgent = GetComponentInParent<NavMeshAgent>();
-        interact = GetComponentInParent<Interact>();
+        interact = GetComponentInParent<RayCast>();
     }
 
     public override State RunCurrentState()
@@ -23,9 +23,7 @@ public class IdleState : State
                 case InteractTypes.Location:
                     return moveToState;
                 case InteractTypes.Interactable:
-                    break;
-                case InteractTypes.Item:
-                    return collectState;
+                    return interactState;
                 case InteractTypes.Enemy:
                     break;
             }

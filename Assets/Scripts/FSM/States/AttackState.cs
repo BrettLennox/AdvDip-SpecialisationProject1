@@ -9,7 +9,7 @@ public class AttackState : State
     protected override void OnEnable()
     {
         navMeshAgent = GetComponentInParent<NavMeshAgent>();
-        interact = GetComponentInParent<Interact>();
+        interact = GetComponentInParent<RayCast>();
     }
 
     public override State RunCurrentState()

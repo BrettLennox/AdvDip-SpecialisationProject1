@@ -12,12 +12,11 @@ public enum InteractTypes
     Enemy,
     Default
 }
-public class Interact : MonoBehaviour
+public class RayCast : MonoBehaviour
 {
     [SerializeField] private InteractTypes _currentInteractType;
     [SerializeField] private GameObject _clickedObject;
     [SerializeField] private Vector3 _destination;
-    [SerializeField] private LayerMask _walkableArea;
     Ray ray;
 
     public Vector3 Destination { get => _destination; }
@@ -41,15 +40,15 @@ public class Interact : MonoBehaviour
         {
             Debug.DrawRay(ray.origin, ray.direction * 10, Color.red, 3f);
             _destination = hit.point;
-            if (hit.transform.CompareTag("Item"))
-            {
-                _currentInteractType = InteractTypes.Item;
-            }
-            else if (hit.transform.CompareTag("Enemy"))
+            //if (hit.transform.CompareTag("Item"))
+            //{
+            //    _currentInteractType = InteractTypes.Item;
+            //}
+            if (hit.transform.CompareTag("Enemy"))
             {
                 _currentInteractType = InteractTypes.Enemy;
             }
-            else if (hit.transform.CompareTag("Interactable"))
+            else if (hit.transform.GetComponent<IInteractable>() != null)
             {
                 _currentInteractType = InteractTypes.Interactable;
             }

@@ -10,7 +10,7 @@ public class MoveToState : State
     protected override void OnEnable()
     {
         navMeshAgent = GetComponentInParent<NavMeshAgent>();
-        interact = GetComponentInParent<Interact>();
+        interact = GetComponentInParent<RayCast>();
     }
 
     public override State RunCurrentState()
@@ -18,7 +18,7 @@ public class MoveToState : State
         navMeshAgent.SetDestination(interact.Destination);
         var distance = new Vector2(interact.Destination.x, interact.Destination.z) - new Vector2(transform.position.x, transform.position.z);
         float distMagnitude = distance.magnitude;
-        Debug.Log(distMagnitude);
+        //Debug.Log(distMagnitude);
         if(distMagnitude <= navMeshAgent.stoppingDistance)
         {
             interact.ClickedObject = null;
