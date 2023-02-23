@@ -7,13 +7,8 @@ public class Player : MonoBehaviour
 {
     public InventoryObject inventory;
 
-    private void Start()
+    public void AddToInventory(ItemObject item)
     {
-        GameEvents.current.onCollectItem += OnCollectItem;
-    }
-
-    private void OnCollectItem(ItemObject item, int amount)
-    {
-        inventory.AddItem(item, amount);
+        inventory.AddItem(item, 1);
     }
 }
