@@ -16,6 +16,11 @@ public class MoveToState : State
 
     public override State RunCurrentState()
     {
+        if(interact.CurrentInteractType != InteractTypes.Location)
+        {
+            return idleState;
+        }
+
         SetUpState();
         var distance = new Vector2(interact.Destination.x, interact.Destination.z) - new Vector2(transform.position.x, transform.position.z);
         float distMagnitude = distance.magnitude;

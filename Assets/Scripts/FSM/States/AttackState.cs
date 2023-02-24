@@ -9,7 +9,7 @@ public class AttackState : State
     [SerializeField] private Animator _animator;
     [SerializeField] private bool canAttack;
     public IdleState idleState;
-    public float distance;
+    //public float distance;
 
     protected override void OnEnable()
     {
@@ -20,30 +20,51 @@ public class AttackState : State
 
     private void Update()
     {
-        if (interact.ClickedObject != null)
-        {
-            distance = (interact.ClickedObject.transform.position.magnitude - transform.position.magnitude);
-        }
+
     }
 
     public override State RunCurrentState()
     {
-        SetUpState();
-        if (interact.ClickedObject.activeInHierarchy)
+        if (interact.ClickedObject != null)
         {
-            if (playerAnimationManager.canAttack)
+            SetUpState();
+            var distance = interact.ClickedObject.transform.position - transform.position;
+            var distMagnitude = distance.magnitude;
+            Debug.Log(distMagnitude);
+            if (distMagnitude <= navMeshAgent.stoppingDistance)
             {
-                playerAnimationManager.RunAttackAnimationTrigger();
-                if (playerAnimationManager.reachedAttackEnd)
+                navMeshAgent.isStopped = true;
+                if (interact.ClickedObject.GetComponent<IDamageable>() != null)
                 {
-                    interact.ClickedObject.GetComponent<IDamageable>().Damage(1);
-                    playerAnimationManager.reachedAttackEnd = false;
+                    if (playerAnimationManager.canAttack)
+                    {
+                        playerAnimationManager.RunAttackAnimationTrigger();
+
+                    }
+                    else if (playerAnimationManager.reachedAttackEnd && interact.ClickedObject.activeInHierarchy)
+                    {
+                        interact.ClickedObject.GetComponent<IDamageable>().Damage(1);
+                        playerAnimationManager.reachedAttackEnd = false;
+                        playerAnimationManager.canAttack = true;
+                    }
                 }
+            }
+            else
+            {
+                navMeshAgent.isStopped = false;
             }
         }
         else
         {
+            navMeshAgent.isStopped = false;
+            interact.ClickedObject = null;
             interact.CurrentInteractType = InteractTypes.Default;
+            return idleState;
+        }
+
+        if (interact.CurrentInteractType != InteractTypes.Enemy)
+        {
+            navMeshAgent.isStopped = false;
             return idleState;
         }
         return this;

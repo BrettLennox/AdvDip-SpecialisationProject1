@@ -25,7 +25,6 @@ public class PlayerAnimationManager : MonoBehaviour
 
     public void FinishedAttack()
     {
-        canAttack = true;
         reachedAttackEnd = true;
     }
 }
