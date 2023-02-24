@@ -30,7 +30,6 @@ public class IdleState : State
                     return interactState;
                 case InteractTypes.Enemy:
                     return attackState;
-                    break;
             }
         }
         return this;

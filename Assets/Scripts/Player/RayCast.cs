@@ -15,8 +15,8 @@ public enum InteractTypes
 public class RayCast : MonoBehaviour
 {
     [SerializeField] private InteractTypes _currentInteractType;
-    [SerializeField] private GameObject _clickedObject;
-    [SerializeField] private Vector3 _destination;
+    private GameObject _clickedObject;
+    private Vector3 _destination;
     Ray ray;
 
     public Vector3 Destination { get => _destination; }

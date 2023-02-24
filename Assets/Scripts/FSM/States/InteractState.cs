@@ -9,6 +9,7 @@ public class InteractState : State
     public IdleState idleState;
     public GameObject objToCollect;
     public bool hasAddedRef = false;
+    public bool hasSetupState;
 
     protected override void OnEnable()
     {
@@ -21,24 +22,41 @@ public class InteractState : State
     public override State RunCurrentState()
     {
         SetUpState();
-        var distance = new Vector2(interact.Destination.x, interact.Destination.z) - new Vector2(transform.position.x, transform.position.z);
-        float distMagnitude = distance.magnitude;
-        //Debug.Log(distMagnitude);
-
-        if (distMagnitude <= navMeshAgent.stoppingDistance)
+        if(objToCollect == interact.ClickedObject)
         {
-            IInteractable interactable = interact.ClickedObject.GetComponent<IInteractable>();
-            if (interactable != null)
+            var distance = new Vector2(interact.Destination.x, interact.Destination.z) - new Vector2(transform.position.x, transform.position.z);
+            float distMagnitude = distance.magnitude;
+            //Debug.Log(distMagnitude);
+
+            if (distMagnitude <= navMeshAgent.stoppingDistance)
             {
-                interactable.Interact(player);
-                ResetState();
-                return idleState;
+                navMeshAgent.isStopped = true;
+                IInteractable interactable = interact.ClickedObject.GetComponent<IInteractable>();
+                if (interactable != null)
+                {
+                    interactable.Interact(player);
+                    ResetState();
+                    return idleState;
+                }
+                else
+                {
+                    ResetState();
+                    return idleState;
+                }
             }
-            else
-            {
-                ResetState();
-                return idleState;
-            }
+        }
+        else
+        {
+            navMeshAgent.isStopped = false;
+            hasSetupState = false;
+            return idleState;
+        }
+        
+
+        if (interact.CurrentInteractType != InteractTypes.Interactable)
+        {
+            ResetState();
+            return idleState;
         }
 
         #region Old
@@ -79,6 +97,8 @@ public class InteractState : State
 
     private void ResetState()
     {
+        navMeshAgent.isStopped = false;
+        hasSetupState = false;
         interact.ClickedObject = null;
         interact.CurrentInteractType = InteractTypes.Default;
         playerAnimationManager.SetMoveAnimationBool(false);
@@ -86,7 +106,12 @@ public class InteractState : State
 
     public override void SetUpState()
     {
-        navMeshAgent.SetDestination(interact.ClickedObject.transform.position);
-        playerAnimationManager.SetMoveAnimationBool(true);
+        if (!hasSetupState)
+        {
+            objToCollect = interact.ClickedObject;
+            navMeshAgent.SetDestination(interact.ClickedObject.transform.position);
+            playerAnimationManager.SetMoveAnimationBool(true);
+            hasSetupState = true;
+        }
     }
 }
