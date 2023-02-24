@@ -40,11 +40,7 @@ public class RayCast : MonoBehaviour
         {
             Debug.DrawRay(ray.origin, ray.direction * 10, Color.red, 3f);
             _destination = hit.point;
-            //if (hit.transform.CompareTag("Item"))
-            //{
-            //    _currentInteractType = InteractTypes.Item;
-            //}
-            if (hit.transform.CompareTag("Enemy"))
+            if (hit.transform.GetComponent<IDamageable>() != null)
             {
                 _currentInteractType = InteractTypes.Enemy;
             }

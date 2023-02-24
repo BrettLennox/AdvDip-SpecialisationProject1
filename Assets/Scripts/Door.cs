@@ -50,10 +50,10 @@ public class Door : MonoBehaviour, IInteractable
         switch (doorState)
         {
             case DoorStates.Opened:
-                model.transform.localPosition = new Vector3(0, 2, 0);
+                model.transform.localPosition = new Vector3(0, 3, 0);
                 break;
             case DoorStates.Closed:
-                model.transform.localPosition = new Vector3(0, 0, 0);
+                model.transform.localPosition = new Vector3(0, 1, 0);
                 break;
         }
     }

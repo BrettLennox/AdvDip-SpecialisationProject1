@@ -11,11 +11,12 @@ public class MoveToState : State
     {
         navMeshAgent = GetComponentInParent<NavMeshAgent>();
         interact = GetComponentInParent<RayCast>();
+        playerAnimationManager = GetComponentInParent<PlayerAnimationManager>();
     }
 
     public override State RunCurrentState()
     {
-        navMeshAgent.SetDestination(interact.Destination);
+        SetUpState();
         var distance = new Vector2(interact.Destination.x, interact.Destination.z) - new Vector2(transform.position.x, transform.position.z);
         float distMagnitude = distance.magnitude;
         //Debug.Log(distMagnitude);
@@ -23,8 +24,15 @@ public class MoveToState : State
         {
             interact.ClickedObject = null;
             interact.CurrentInteractType = InteractTypes.Default;
+            playerAnimationManager.SetMoveAnimationBool(false);
             return idleState;
         }
         return this;
+    }
+
+    public override void SetUpState()
+    {
+        navMeshAgent.SetDestination(interact.Destination);
+        playerAnimationManager.SetMoveAnimationBool(true);
     }
 }

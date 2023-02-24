@@ -15,14 +15,15 @@ public class InteractState : State
         navMeshAgent = GetComponentInParent<NavMeshAgent>();
         interact = GetComponentInParent<RayCast>();
         player = GetComponentInParent<Player>();
+        playerAnimationManager = GetComponentInParent<PlayerAnimationManager>();
     }
 
     public override State RunCurrentState()
     {
-        navMeshAgent.destination = interact.ClickedObject.transform.position;
+        SetUpState();
         var distance = new Vector2(interact.Destination.x, interact.Destination.z) - new Vector2(transform.position.x, transform.position.z);
         float distMagnitude = distance.magnitude;
-        Debug.Log(distMagnitude);
+        //Debug.Log(distMagnitude);
 
         if (distMagnitude <= navMeshAgent.stoppingDistance)
         {
@@ -30,8 +31,12 @@ public class InteractState : State
             if (interactable != null)
             {
                 interactable.Interact(player);
-                interact.ClickedObject = null;
-                interact.CurrentInteractType = InteractTypes.Default;
+                ResetState();
+                return idleState;
+            }
+            else
+            {
+                ResetState();
                 return idleState;
             }
         }
@@ -70,5 +75,18 @@ public class InteractState : State
         //}
         #endregion
         return this;
+    }
+
+    private void ResetState()
+    {
+        interact.ClickedObject = null;
+        interact.CurrentInteractType = InteractTypes.Default;
+        playerAnimationManager.SetMoveAnimationBool(false);
+    }
+
+    public override void SetUpState()
+    {
+        navMeshAgent.SetDestination(interact.ClickedObject.transform.position);
+        playerAnimationManager.SetMoveAnimationBool(true);
     }
 }
