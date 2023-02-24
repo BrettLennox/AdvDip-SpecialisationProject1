@@ -24,9 +24,9 @@ public class InteractState : State
         SetUpState();
         if(objToCollect == interact.ClickedObject)
         {
-            var distance = new Vector2(interact.Destination.x, interact.Destination.z) - new Vector2(transform.position.x, transform.position.z);
-            float distMagnitude = distance.magnitude;
-            //Debug.Log(distMagnitude);
+            var distance = interact.ClickedObject.transform.position - transform.position;
+            var distMagnitude = distance.magnitude;
+            Debug.Log(distMagnitude);
 
             if (distMagnitude <= navMeshAgent.stoppingDistance)
             {
@@ -34,12 +34,14 @@ public class InteractState : State
                 IInteractable interactable = interact.ClickedObject.GetComponent<IInteractable>();
                 if (interactable != null)
                 {
+                    Debug.Log("INTERACTING");
                     interactable.Interact(player);
                     ResetState();
                     return idleState;
                 }
                 else
                 {
+                    Debug.Log("FAILED");
                     ResetState();
                     return idleState;
                 }
@@ -58,40 +60,6 @@ public class InteractState : State
             ResetState();
             return idleState;
         }
-
-        #region Old
-        //Vector3 dist = interact.Destination - transform.position;
-        //float distMagnitude = dist.magnitude;
-        //Debug.Log(distMagnitude <= 0.6f);
-        //if (distMagnitude <= 0.6f)
-        //{
-        //    if (interact.ClickedObject.activeInHierarchy)
-        //    {
-        //        bool hasAdded = false;
-        //        Debug.Log("ADDING ITEM");
-        //        if (!hasAdded)
-        //        {
-        //            player.AddToInventory(interact.ClickedObject.GetComponent<Item>().item);
-        //            Destroy(interact.ClickedObject);
-        //            hasAdded = true;
-        //        }
-        //        interact.ClickedObject = null;
-        //        interact.CurrentInteractType = InteractTypes.Default;
-        //        return idleState;
-        //    }
-        //    else
-        //    {
-        //        Debug.Log("NO ITEM TO ADD");
-        //        interact.ClickedObject = null;
-        //        interact.CurrentInteractType = InteractTypes.Default;
-        //        return idleState;
-        //    }
-        //}
-        //if(interact.CurrentInteractType != InteractTypes.Item)
-        //{
-        //    return idleState;
-        //}
-        #endregion
         return this;
     }
 
