@@ -20,9 +20,9 @@ public class IdleState : State
 
     public override State RunCurrentState()
     {
-        SetUpState();
+        SetUpState(navMeshAgent, this.transform.position);
 
-        if(interact.ClickedObject??false)
+        if (interact.ClickedObject ?? false)
         {
             switch (interact.CurrentInteractType)
             {
@@ -37,8 +37,9 @@ public class IdleState : State
         return this;
     }
 
-    public override void SetUpState()
+    public override void SetUpState(NavMeshAgent agent, Vector3 destination)
     {
+        agent.SetDestination(destination);
         playerAnimationManager.SetMoveAnimationBool(false);
     }
 }

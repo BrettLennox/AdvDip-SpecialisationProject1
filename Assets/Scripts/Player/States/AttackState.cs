@@ -29,7 +29,7 @@ public class AttackState : State
     {
         if (interact.ClickedObject != null)
         {
-            SetUpState();
+            SetUpState(navMeshAgent, interact.ClickedObject.transform.position);
             if (targetReference == interact.ClickedObject)
             {
                 var distance = interact.ClickedObject.transform.position - transform.position;
@@ -84,12 +84,12 @@ public class AttackState : State
         return this;
     }
 
-    public override void SetUpState()
+    public override void SetUpState(NavMeshAgent agent, Vector3 destination)
     {
         if (!hasSetupState)
         {
             targetReference = interact.ClickedObject;
-            navMeshAgent.SetDestination(interact.ClickedObject.transform.position);
+            agent.SetDestination(destination);
             playerAnimationManager.SetMoveAnimationBool(true);
             hasSetupState = true;
         }

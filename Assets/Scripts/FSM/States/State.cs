@@ -13,5 +13,5 @@ public abstract class State : MonoBehaviour
 
     }
     public abstract State RunCurrentState();
-    public abstract void SetUpState();
+    public abstract void SetUpState(NavMeshAgent agent, Vector3 destination);
 }

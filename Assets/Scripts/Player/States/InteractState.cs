@@ -23,7 +23,7 @@ public class InteractState : State
 
     public override State RunCurrentState()
     {
-        SetUpState();
+        SetUpState(navMeshAgent, interact.ClickedObject.transform.position);
         if(objToCollect == interact.ClickedObject)
         {
             var distance = interact.ClickedObject.transform.position - transform.position;
@@ -74,12 +74,12 @@ public class InteractState : State
         playerAnimationManager.SetMoveAnimationBool(false);
     }
 
-    public override void SetUpState()
+    public override void SetUpState(NavMeshAgent agent, Vector3 destination)
     {
         if (!hasSetupState)
         {
             objToCollect = interact.ClickedObject;
-            navMeshAgent.SetDestination(interact.ClickedObject.transform.position);
+            agent.SetDestination(destination);
             playerAnimationManager.SetMoveAnimationBool(true);
             hasSetupState = true;
         }

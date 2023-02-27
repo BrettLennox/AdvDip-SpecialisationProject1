@@ -23,7 +23,7 @@ public class MoveToState : State
             return idleState;
         }
 
-        SetUpState();
+        SetUpState(navMeshAgent, interact.Destination);
         var distance = new Vector2(interact.Destination.x, interact.Destination.z) - new Vector2(transform.position.x, transform.position.z);
         float distMagnitude = distance.magnitude;
         //Debug.Log(distMagnitude);
@@ -37,9 +37,9 @@ public class MoveToState : State
         return this;
     }
 
-    public override void SetUpState()
+    public override void SetUpState(NavMeshAgent agent, Vector3 destination)
     {
-        navMeshAgent.SetDestination(interact.Destination);
+        agent.SetDestination(destination);
         playerAnimationManager.SetMoveAnimationBool(true);
     }
 }
