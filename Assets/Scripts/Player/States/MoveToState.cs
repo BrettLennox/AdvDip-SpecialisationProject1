@@ -6,6 +6,8 @@ using UnityEngine.AI;
 public class MoveToState : State
 {
     public IdleState idleState;
+    public RayCast interact;
+    public PlayerAnimationManager playerAnimationManager;
 
     protected override void OnEnable()
     {

@@ -7,8 +7,6 @@ using UnityEngine.AI;
 public abstract class State : MonoBehaviour
 {
     public NavMeshAgent navMeshAgent;
-    public RayCast interact;
-    public PlayerAnimationManager playerAnimationManager;
 
     protected virtual void OnEnable()
     {

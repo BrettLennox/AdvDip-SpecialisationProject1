@@ -7,6 +7,8 @@ using UnityEngine.AI;
 public class AttackState : State
 {
     public IdleState idleState;
+    public RayCast interact;
+    public PlayerAnimationManager playerAnimationManager;
 
     public GameObject targetReference;
     public bool hasSetupState;

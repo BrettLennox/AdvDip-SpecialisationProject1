@@ -8,6 +8,8 @@ public class IdleState : State
     public MoveToState moveToState;
     public InteractState interactState;
     public AttackState attackState;
+    public RayCast interact;
+    public PlayerAnimationManager playerAnimationManager;
 
     protected override void OnEnable()
     {

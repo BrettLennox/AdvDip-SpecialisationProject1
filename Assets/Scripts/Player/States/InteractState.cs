@@ -10,6 +10,8 @@ public class InteractState : State
     public GameObject objToCollect;
     public bool hasAddedRef = false;
     public bool hasSetupState;
+    public RayCast interact;
+    public PlayerAnimationManager playerAnimationManager;
 
     protected override void OnEnable()
     {
