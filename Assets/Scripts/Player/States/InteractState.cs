@@ -24,45 +24,39 @@ public class InteractState : State
     public override State RunCurrentState()
     {
         SetUpState(navMeshAgent, interact.ClickedObject.transform.position);
-        if(objToCollect == interact.ClickedObject)
+        if (interact.CurrentInteractType != InteractTypes.Interactable)
         {
-            var distance = interact.ClickedObject.transform.position - transform.position;
-            var distMagnitude = distance.magnitude;
-            Debug.Log(distMagnitude);
-
-            if (distMagnitude <= navMeshAgent.stoppingDistance)
-            {
-                navMeshAgent.isStopped = true;
-                IInteractable interactable = interact.ClickedObject.GetComponent<IInteractable>();
-                if (interactable != null)
-                {
-                    Debug.Log("INTERACTING");
-                    interactable.Interact(player);
-                    ResetState();
-                    return idleState;
-                }
-                else
-                {
-                    Debug.Log("FAILED");
-                    ResetState();
-                    return idleState;
-                }
-            }
+            navMeshAgent.isStopped = false;
+            hasSetupState = false;
+            playerAnimationManager.SetMoveAnimationBool(false);
+            return idleState;
         }
-        else
+
+        if (objToCollect != interact.ClickedObject)
         {
             navMeshAgent.isStopped = false;
             hasSetupState = false;
             return idleState;
         }
-        
 
-        if (interact.CurrentInteractType != InteractTypes.Interactable)
+        var distance = interact.ClickedObject.transform.position - transform.position;
+        var distMagnitude = distance.magnitude;
+        Debug.Log(distMagnitude);
+        if (distMagnitude >= navMeshAgent.stoppingDistance) { return this; }
+
+        navMeshAgent.isStopped = true;
+        IInteractable interactable = interact.ClickedObject.GetComponent<IInteractable>();
+        if (interactable == null)
         {
+            Debug.Log("FAILED");
             ResetState();
             return idleState;
         }
-        return this;
+
+        Debug.Log("INTERACTING");
+        interactable.Interact(player);
+        ResetState();
+        return idleState;
     }
 
     private void ResetState()

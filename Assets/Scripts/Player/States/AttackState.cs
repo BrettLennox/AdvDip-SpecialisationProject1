@@ -34,7 +34,7 @@ public class AttackState : State
             {
                 var distance = interact.ClickedObject.transform.position - transform.position;
                 var distMagnitude = distance.magnitude;
-                Debug.Log(distMagnitude);
+                //Debug.Log(distMagnitude);
                 if (distMagnitude <= navMeshAgent.stoppingDistance)
                 {
                     navMeshAgent.isStopped = true;

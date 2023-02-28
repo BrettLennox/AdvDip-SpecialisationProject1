@@ -5,25 +5,42 @@ using UnityEngine.AI;
 
 public class EnemyWanderState : State
 {
+    public float waitTime;
+    public float timer;
+
     protected override void OnEnable()
     {
         base.OnEnable();
         navMeshAgent = GetComponentInParent<NavMeshAgent>();
+        waitTime = SetRandomWaitTime();
+    }
+
+    private float SetRandomWaitTime()
+    {
+        return Random.Range(1f, 3f);
     }
 
     public override State RunCurrentState()
     {
-        var distanceRemaining = navMeshAgent.remainingDistance;
-        Debug.Log(distanceRemaining);
-        //Debug.Log(navMeshAgent.destination);
         //code to be performed when in this state
-        if(distanceRemaining <= navMeshAgent.stoppingDistance)
-        {
-            navMeshAgent.SetDestination(RandomCoordinates());
-        }
+        var distanceRemaining = navMeshAgent.remainingDistance;
+        if (distanceRemaining >= navMeshAgent.stoppingDistance) { return this; }
+
+        TimerFunction();
 
         //including conditions to exit the state
         return this;
+    }
+
+    private void TimerFunction()
+    {
+        timer += Time.deltaTime;
+        if (timer >= waitTime)
+        {
+            waitTime = SetRandomWaitTime();
+            navMeshAgent.SetDestination(RandomCoordinates());
+            timer = 0;
+        }
     }
 
     private Vector3 RandomCoordinates()
