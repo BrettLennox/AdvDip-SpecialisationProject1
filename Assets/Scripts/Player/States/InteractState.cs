@@ -13,6 +13,7 @@ public class InteractState : State
     public RayCast interact;
     public PlayerAnimationManager playerAnimationManager;
 
+    // used to initialise references as to not create errors
     protected override void OnEnable()
     {
         navMeshAgent = GetComponentInParent<NavMeshAgent>();
@@ -21,6 +22,11 @@ public class InteractState : State
         playerAnimationManager = GetComponentInParent<PlayerAnimationManager>();
     }
 
+    /// <summary>
+    /// The RunCurrentState function is used to run the state specific operations
+    /// This state is used to move the player to the targeted interactable object and then perform the objects interact function once it has reached it
+    /// </summary>
+    /// <returns> this function then returns the specific state to remain in or move to </returns>
     public override State RunCurrentState()
     {
         SetUpState(navMeshAgent, interact.ClickedObject.transform.position);
@@ -68,6 +74,11 @@ public class InteractState : State
         playerAnimationManager.SetMoveAnimationBool(false);
     }
 
+    /// <summary>
+    /// Used to set up the specific fields for the NavMeshAgent and animation
+    /// </summary>
+    /// <param name="agent"> this arg is used to pass in the NavMeshAgent on the object and fill its SetDestination argument</param>
+    /// <param name="destination"> this arg is used to pass in the destination on the object and fill its SetDestination argument</param>
     public override void SetUpState(NavMeshAgent agent, Vector3 destination)
     {
         if (!hasSetupState)

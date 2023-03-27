@@ -31,6 +31,12 @@ public class RayCast : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// This function is used to cast a ray from the mouse position through the camera
+    /// It then checks if the object it hits has the Iinteractable or IDamageable interface and sets the currentInteractType to the appropriate enum type
+    /// If it doesn't hit any of those it defaults to location
+    /// </summary>
+    /// <returns> returns the hit gameobject or null if it hits nothing </returns>
     public GameObject CastRayFromMouse()
     {
         RaycastHit hit;

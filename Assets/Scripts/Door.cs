@@ -18,6 +18,7 @@ public class Door : MonoBehaviour, IInteractable
         ChangeDoorState(player);
     }
 
+    // changes the door state to the opposite enum type
     private void ChangeDoorState(Player player)
     {
         if (requiresKey)
@@ -45,6 +46,7 @@ public class Door : MonoBehaviour, IInteractable
         ApplyDoorPositions();
     }
 
+    //sets the doors position based on its current enum type
     private void ApplyDoorPositions()
     {
         switch (doorState)

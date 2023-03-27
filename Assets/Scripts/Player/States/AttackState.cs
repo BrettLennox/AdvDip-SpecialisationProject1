@@ -13,6 +13,7 @@ public class AttackState : State
     public GameObject targetReference;
     public bool hasSetupState;
 
+    // used to initialise references as to not create errors
     protected override void OnEnable()
     {
         navMeshAgent = GetComponentInParent<NavMeshAgent>();
@@ -25,6 +26,12 @@ public class AttackState : State
 
     }
 
+    /// <summary>
+    /// The RunCurrentState function is used to run the state specific operations
+    /// This state is used to move the AI to the set targets destination and once it has reached the destination it performs the attack function
+    /// Once it has performed these functions it checks agains the target object being valid in the scene and returns the correct state afterwards
+    /// </summary>
+    /// <returns> return is used to decide which state to move into </returns>
     public override State RunCurrentState()
     {
         if (interact.ClickedObject != null)
@@ -84,6 +91,11 @@ public class AttackState : State
         return this;
     }
 
+    /// <summary>
+    /// Used to set up the specific fields for the NavMeshAgent and animation
+    /// </summary>
+    /// <param name="agent"> this arg is used to pass in the NavMeshAgent on the object and fill its SetDestination argument</param>
+    /// <param name="destination"> this arg is used to pass in the destination on the object and fill its SetDestination argument</param>
     public override void SetUpState(NavMeshAgent agent, Vector3 destination)
     {
         if (!hasSetupState)
